@@ -73,10 +73,10 @@
            target="_blank" />
       </td>
       <td th:text="${posting.tariffName}"></td>
-      <td th:text="${posting.senderEmail}"></td>
-      <td th:text="${posting.recieverEmail}"></td>
-      <td th:text="${posting.officeFromID}"></td>
-      <td th:text="${posting.officeToID}"></td>
+      <td th:text="${posting.senderName}"></td>
+      <td th:text="${posting.receiverName}"></td>
+      <td th:text="${posting.officeFromName}"></td>
+      <td th:text="${posting.officeToName}"></td>
       <td th:text="${posting.status}"></td>
       <td>
         <a th:href="@{/postings/edit/{postingNumber}(postingNumber=${posting.postingNumber})}"
