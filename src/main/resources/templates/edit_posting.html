@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>Delivery project</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <!--        <a class="navbar-brand" href="#">Delivery project</a>-->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!--                <li class="nav-item">-->
+        <!--                    <a class="nav-link active" aria-current="page" th:href="@{/register}">Register</a>-->
+        <!--                </li>-->
+        <!--        <a class="navbar-brand" href="#">Delivery project</a>-->
+
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{/}">CompanyName</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{/create-posting}">Create posting</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{/users}">Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{/postings}">Postings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{/offices}">Our offices</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{/logout}">Logout</a>
+        </li>
+
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<br>
+<br>
+<div class="container">
+  <div class="row col-md-8 offset-md-2">
+    <div class="card">
+      <div th:if="${param.success}">
+        <div class="alert alert-info">Вы обновили данные!</div>
+      </div>
+      <div class="card-header">
+        <h2 class="text-center">Обновить данные о пользователе</h2>
+      </div>
+      <div class="card-body">
+
+        <form method="post" th:action="@{/postings/{postingNumber}(postingNumber=${posting.postingNumber})}" th:object = "${posting}">
+          <div class="form-group mb-3">
+            <label class="form-label">Тариф доставки</label>
+            <select id="tariffName" th:field="*{deliveryTariff.tariffName}">
+              <!--            <option value="" th:text="#{common.select.prompt}"></option>-->
+              <option th:each="deliveryTariff : ${deliveryTariffs}"
+                      th:value="${deliveryTariff}"
+                      th:text="${deliveryTariff}">
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label">SenderEmail</label>
+            <input class="form-control"
+                   id="SenderEmail"
+                   name="SenderEmail"
+                   placeholder="Enter SenderEmail "
+                   th:field="*{senderEmail}"
+                   type="email"
+            />
+            <p th:errors="*{senderEmail}" class="text-danger"
+               th:if="${#fields.hasErrors('senderEmail')}">
+            </p>
+          </div>
+
+
+          <div class="form-group">
+            <label>Регион отправления</label>
+            <select id="regionFrom" >
+              <!--                <label for="region">Регион отправления</label>-->
+              <!--                <select id="region" th:field="*{regions}">-->
+              <!--            <option value="" th:text="#{common.select.prompt}"></option>-->
+              <option th:each="regionFrom : ${regions}"
+                      th:value="${regionFrom}"
+                      th:text="${regionFrom}">
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label">ПВЗ отправления</label>
+            <select id="officeFrom" th:field="*{officeFromID}">
+              <!--            <option value="" th:text="#{common.select.prompt}"></option>-->
+              <option th:each="officeFrom : ${offices}"
+                      th:value="${officeFrom.id}"
+                      th:text="${officeFrom.fullOfficeName}">
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label">SenderEmail</label>
+            <input class="form-control"
+                   id="RecieverEmail"
+                   name="RecieverEmail"
+                   placeholder="Enter RecieverEmail "
+                   th:field="*{recieverEmail}"
+                   type="email"
+            />
+            <p th:errors="*{recieverEmail}" class="text-danger"
+               th:if="${#fields.hasErrors('recieverEmail')}">
+            </p>
+          </div>
+
+      <div class="form-group">
+        <label>Регион получения</label>
+        <select id="regionTo" >
+          <!--                <label for="region">Регион отправления</label>-->
+          <!--                <select id="region" th:field="*{regions}">-->
+          <!--            <option value="" th:text="#{common.select.prompt}"></option>-->
+          <option th:each="regionTo : ${regions}"
+                  th:value="${regionTo}"
+                  th:text="${regionTo}">
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label">ПВЗ получения</label>
+        <select id="officeTo" th:field="*{officeToID}">
+          <!--            <option value="" th:text="#{common.select.prompt}"></option>-->
+          <option th:each="officeTo : ${offices}"
+                  th:value="${officeTo.id}"
+                  th:text="${officeTo.fullOfficeName}">
+          </option>
+        </select>
+      </div>
+
+
+      <div class = "box-footer">
+            <button type="submit" class = "btn btn-primary">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
