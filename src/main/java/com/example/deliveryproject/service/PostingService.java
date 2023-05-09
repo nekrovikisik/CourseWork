@@ -11,7 +11,7 @@ public interface PostingService {
 
     List<PostingDto> findAllPostings();
     Posting findById(Long id);
-    Posting getPostingByPostingNumber(String postingNumber);
+    PostingDto findPostingDTOByPostingNumber(String postingNumber);
 
     Posting updatePosting(Posting posting);
     public List<PostingDto> findPostingsBySenderID(Long senderID);

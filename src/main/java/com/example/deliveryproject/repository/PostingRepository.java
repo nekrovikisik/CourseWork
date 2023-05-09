@@ -13,6 +13,8 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
     Long findIdByPostingNumber(@Param("postingNumber") String postingNumber);
 
 //    @Query(nativeQuery = true, value = "select * from postings where senderID = :senderID LIMIT 1")
-    List<Posting> findAllBySenderID(Long id);
-    List<Posting> findAllByRecieverID(Long id);
+    List<Posting> findAllBySender_Id(Long id);
+    List<Posting> findAllByReceiver_Id(Long id);
+    int countPostingBySender_Id(Long senderID);
+
 }
