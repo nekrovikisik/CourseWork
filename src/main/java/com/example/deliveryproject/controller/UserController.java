@@ -66,7 +66,7 @@ public class UserController {
         List<PostingDto> postingsFrom = postingService.findPostingsBySenderID(id);
         List<PostingDto> postingsTo = postingService.findPostingsByReceiverID(id);
 
-        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("user", userService.findDtoById(id));
         model.addAttribute("postingsFrom", postingsFrom);
         model.addAttribute("postingsTo", postingsTo);
         return "show_user";

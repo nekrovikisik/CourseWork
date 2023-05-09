@@ -2,6 +2,7 @@ package com.example.deliveryproject.controller;
 
 import com.example.deliveryproject.dto.PostingDto;
 import com.example.deliveryproject.entity.DeliveryTariff;
+import com.example.deliveryproject.entity.Office;
 import com.example.deliveryproject.entity.Posting;
 import com.example.deliveryproject.repository.DeliveryTariffRepository;
 import com.example.deliveryproject.repository.OfficeRepository;
@@ -52,19 +53,20 @@ public class PostingController {
                              @ModelAttribute("posting") Posting posting,
                              Model model) {
 
-        // get posting from database by postingNumber
-
         Posting existingPosting = postingService.findByPostingNumber(postingNumber);
+
         String newDeliveryTariffName = posting.getDeliveryTariff().getTariffName();
         DeliveryTariff newDeliveryTariff = deliveryTariffRepository.findByTariffName(newDeliveryTariffName);
-
         existingPosting.setDeliveryTariff(newDeliveryTariff);
 
-        existingPosting.setSenderEmail(posting.getSenderEmail());
-        existingPosting.setRecieverEmail(posting.getRecieverEmail());
-        existingPosting.setOfficeFromID(posting.getOfficeFromID());
-        existingPosting.setOfficeToID(posting.getOfficeToID());
-        // save updated posting object
+        String newOfficeFromName = posting.getOfficeFrom().getFullOfficeName();
+        Office newOfficeFrom = officeRepository.findByFullOfficeName(newOfficeFromName);
+        existingPosting.setOfficeFrom(newOfficeFrom);
+
+        String newOfficeToName = posting.getOfficeTo().getFullOfficeName();
+        Office newOfficeTo = officeRepository.findByFullOfficeName(newOfficeToName);
+        existingPosting.setOfficeTo(newOfficeTo);
+
         postingService.updatePosting(existingPosting);
         return "redirect:/postings";
     }
@@ -73,6 +75,13 @@ public class PostingController {
     public String deletePosting(@PathVariable String postingNumber) {
         postingService.deletePostingByPostingNumber(postingNumber);
         return "redirect:/postings";
+    }
+
+    @GetMapping("/postings/show/{postingNumber}")
+    public String showPosting(@PathVariable String postingNumber, Model model) {
+        PostingDto posting = postingService.findPostingDTOByPostingNumber(postingNumber);
+        model.addAttribute("posting", posting);
+        return "show_posting";
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.deliveryproject.service.impl;
 
 import com.example.deliveryproject.dto.PostingDto;
 import com.example.deliveryproject.dto.UserDto;
+import com.example.deliveryproject.entity.Office;
 import com.example.deliveryproject.entity.Posting;
 import com.example.deliveryproject.entity.User;
 import com.example.deliveryproject.entity.DeliveryTariff;
@@ -40,37 +41,38 @@ public class PostingServiceImpl implements PostingService {
         Posting posting = new Posting();
 //        Порядковый номер постинга у этого челика
 //        posting.setTariffName(postingDto.getTariffName());
-        posting.setSenderEmail(postingDto.getSenderEmail());
 
         User sender = userRepository.findByEmail(postingDto.getSenderEmail());
 
-        if(sender == null){
-            sender = checkUserExist();
+        if(sender != null){
+            posting.setSender(sender);
         }
-        int senderPostingsCount = userRepository.getCountPostingsByUserID(sender.getId());
+
+        int senderPostingsCount = postingRepository.countPostingBySender_Id(sender.getId());
         String postingNumber = String.format("%d-%d", sender.getId(), senderPostingsCount+1);
         posting.setPostingNumber(postingNumber);
 
-        posting.setSenderEmail(sender.getEmail());
-        posting.setSenderID(sender.getId());
-
-        User reciever = userRepository.findByEmail(postingDto.getRecieverEmail());
-
-        if(reciever == null){
-            reciever = checkUserExist();
+        User receiver = userRepository.findByEmail(postingDto.getReceiverEmail());
+        if(receiver != null){
+            posting.setReceiver(receiver);
         }
-        posting.setRecieverEmail(reciever.getEmail());
-        posting.setRecieverID(reciever.getId());
+
 
         DeliveryTariff deliveryTariff = deliveryTariffRepository.findByTariffName(postingDto.getTariffName());
-        if(deliveryTariff == null){
-            deliveryTariff = checkDeliveryTariffExist();
+        if(deliveryTariff != null){
+            posting.setDeliveryTariff(deliveryTariff);
         }
-        posting.setDeliveryTariff(deliveryTariff);
 
-        posting.setOfficeFromID(postingDto.getOfficeFromID());
-        posting.setOfficeToID(postingDto.getOfficeToID());
-        posting.setOfficeToID(postingDto.getOfficeToID());
+        Office officeFrom = officeRepository.findByFullOfficeName(postingDto.getOfficeFromName());
+        if(officeFrom != null){
+            posting.setOfficeFrom(officeFrom);
+        }
+
+        Office officeTo = officeRepository.findByFullOfficeName(postingDto.getOfficeToName());
+        if(officeTo != null){
+            posting.setOfficeTo(officeTo);
+        }
+
         posting.setStatus("Новый");
         postingRepository.save(posting);
     }
@@ -80,8 +82,8 @@ public class PostingServiceImpl implements PostingService {
         return postingRepository.getById(postingRepository.findIdByPostingNumber(postingNumber));
     }
     @Override
-    public Posting getPostingByPostingNumber(String postingNumber) {
-        return postingRepository.findById(postingRepository.findIdByPostingNumber(postingNumber)).get();
+    public PostingDto findPostingDTOByPostingNumber(String postingNumber) {
+        return convertEntityToDto(postingRepository.findById(postingRepository.findIdByPostingNumber(postingNumber)).get());
     }
 
     @Override
@@ -96,21 +98,16 @@ public class PostingServiceImpl implements PostingService {
 
     @Override
     public List<PostingDto> findPostingsBySenderID(Long senderID){
-        List<Posting> postings = postingRepository.findAllBySenderID(senderID);
+        List<Posting> postings = postingRepository.findAllBySender_Id(senderID);
         return postings.stream().map((posting) -> convertEntityToDto(posting))
                 .collect(Collectors.toList());
     }
     @Override
     public List<PostingDto> findPostingsByReceiverID(Long receiverID){
-        List<Posting> postings = postingRepository.findAllByRecieverID(receiverID);
+        List<Posting> postings = postingRepository.findAllByReceiver_Id(receiverID);
         return postings.stream().map((posting) -> convertEntityToDto(posting))
                 .collect(Collectors.toList());
     }
-
-//    @Override
-//    public DeliveryTariff findByTariffName(String tariffName) {
-//        return deliveryTariffRepository.findByTariffName(tariffName);
-//    }
 
     @Override
     public List<PostingDto> findAllPostings() {
@@ -130,28 +127,29 @@ public class PostingServiceImpl implements PostingService {
         postingDto.setTariffID(posting.getDeliveryTariff().getId());
         postingDto.setTariffName(posting.getDeliveryTariff().getTariffName());
 
-        postingDto.setSenderEmail(posting.getSenderEmail());
-        postingDto.setSenderID(posting.getSenderID());
-        postingDto.setOfficeFromID(posting.getOfficeFromID());
+        postingDto.setSenderEmail(posting.getSender().getEmail());
+        postingDto.setSenderID(posting.getSender().getId());
+        postingDto.setSenderName(posting.getSender().getName());
 
-        postingDto.setRecieverEmail(posting.getRecieverEmail());
-        postingDto.setRecieverID(posting.getRecieverID());
-        postingDto.setOfficeToID(posting.getOfficeToID());
+        postingDto.setReceiverEmail(posting.getReceiver().getEmail());
+        postingDto.setReceiverID(posting.getReceiver().getId());
+        postingDto.setReceiverName(posting.getReceiver().getName());
+
+        postingDto.setOfficeFromID(posting.getOfficeFrom().getId());
+        postingDto.setOfficeFromName(posting.getOfficeFrom().getFullOfficeName());
+        postingDto.setOfficeFromLat(posting.getOfficeFrom().getLatitude());
+        postingDto.setOfficeFromLon(posting.getOfficeFrom().getLongitude());
+
+        postingDto.setOfficeToID(posting.getOfficeTo().getId());
+        postingDto.setOfficeToName(posting.getOfficeTo().getFullOfficeName());
+        postingDto.setOfficeToLat(posting.getOfficeTo().getLatitude());
+        postingDto.setOfficeToLon(posting.getOfficeTo().getLongitude());
+
+        postingDto.setCreatedAt(posting.getCreatedAt());
+        postingDto.setModifyAt(posting.getModifyAt());
+
         postingDto.setStatus(posting.getStatus());
         return postingDto;
     }
-
-    private User checkUserExist() {
-        User user = new User();
-//        user.setName("ROLE_ADMIN");
-        return userRepository.save(user);
-    }
-
-    private DeliveryTariff checkDeliveryTariffExist() {
-        DeliveryTariff deliveryTariff = new DeliveryTariff();
-//        user.setName("ROLE_ADMIN");
-        return deliveryTariffRepository.save(deliveryTariff);
-    }
-
 
 }

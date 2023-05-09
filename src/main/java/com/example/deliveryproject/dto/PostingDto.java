@@ -22,11 +22,22 @@ public class PostingDto
     @NotEmpty(message = "Enter sender's email")
     private String senderEmail;
     private Long senderID;
-    @NotEmpty(message = "Enter reciever's email")
-    private String recieverEmail;
-    private Long recieverID;
+    private String senderName;
+    @NotEmpty(message = "Enter receiver's email")
+    private String receiverEmail;
+    private Long receiverID;
+    private String receiverName;
+
     private Long officeFromID;
+    private String officeFromName;
+    private double officeFromLat;
+    private double officeFromLon;
+
     private Long officeToID;
+    private String officeToName;
+    private double officeToLat;
+    private double officeToLon;
+
     private String status;
     private Date createdAt;
     private Date modifyAt;

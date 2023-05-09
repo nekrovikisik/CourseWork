@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -41,8 +44,9 @@ public class Office
 
 
 
-//    @OneToOne(cascade=CascadeType.ALL)
-//    @JoinColumn(name = "ID")
-//    private Posting posting = new Posting();
+    @OneToMany(mappedBy = "officeFrom")
+    private List<Posting> postingFrom = new ArrayList<>();
+    @OneToMany(mappedBy = "officeTo")
+    private List<Posting> postingTo = new ArrayList<>();
 
 }

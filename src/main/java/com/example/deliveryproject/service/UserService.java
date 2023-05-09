@@ -13,6 +13,8 @@ public interface UserService {
 
     List<UserDto> findAllUsers();
 
+    UserDto findDtoById(Long id);
+
     User getUserById(Long id);
 
     User updateUser(User user);

@@ -52,6 +52,12 @@ public class UserServiceImpl implements UserService {
     public User findById(Long id) {
         return userRepository.getById(id);
     }
+
+    @Override
+    public UserDto findDtoById(Long id) {
+        return convertEntityToDto(userRepository.getById(id));
+    }
+
     @Override
     public User getUserById(Long id) {
         return userRepository.findById(id).get();

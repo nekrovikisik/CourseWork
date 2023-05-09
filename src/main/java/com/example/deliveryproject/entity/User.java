@@ -53,4 +53,10 @@ public class User
     @ManyToMany(mappedBy="users")
     private List<Posting> postings;
 
+    @OneToMany(mappedBy = "sender")
+    private List<Posting> sentPostings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Posting> receivePostings = new ArrayList<>();
+
 }
