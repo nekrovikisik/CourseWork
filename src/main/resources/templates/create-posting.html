@@ -117,10 +117,10 @@
 
             <div class="form-group mb-3">
                 <label class="form-label">ПВЗ отправления</label>
-                <select id="officeFrom" th:field="*{officeFromID}">
+                <select id="officeFrom" th:field="*{officeFromName}">
                     <!--            <option value="" th:text="#{common.select.prompt}"></option>-->
                     <option th:each="officeFrom : ${offices}"
-                            th:value="${officeFrom.id}"
+                            th:value="${officeFrom.fullOfficeName}"
                             th:text="${officeFrom.fullOfficeName}">
                     </option>
                 </select>
@@ -129,14 +129,14 @@
             <div class="form-group mb-3">
             <label class="form-label">Email получателя</label>
             <input class="form-control"
-                   id="RecieverEmail"
-                   name="RecieverEmail"
+                   id="ReceiverEmail"
+                   name="ReceiverEmail"
                    placeholder="Введите электронную почту "
-                   th:field="*{recieverEmail}"
+                   th:field="*{receiverEmail}"
                    type="email"
             />
-            <p th:errors="*{recieverEmail}" class="text-danger"
-               th:if="${#fields.hasErrors('recieverEmail')}">
+            <p th:errors="*{receiverEmail}" class="text-danger"
+               th:if="${#fields.hasErrors('receiverEmail')}">
             </p>
           </div>
 
@@ -156,10 +156,10 @@
 
             <div class="form-group mb-3">
                 <label class="form-label">ПВЗ получения</label>
-                <select id="officeTo" th:field="*{officeToID}">
+                <select id="officeTo" th:field="*{officeToName}">
                     <!--            <option value="" th:text="#{common.select.prompt}"></option>-->
                     <option th:each="officeTo : ${offices}"
-                            th:value="${officeTo.id}"
+                            th:value="${officeTo.fullOfficeName}"
                             th:text="${officeTo.fullOfficeName}">
                     </option>
                 </select>
