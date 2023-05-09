@@ -1,6 +1,7 @@
 package com.example.deliveryproject.service.impl;
 
 import com.example.deliveryproject.dto.PostingDto;
+import com.example.deliveryproject.dto.UserDto;
 import com.example.deliveryproject.entity.Posting;
 import com.example.deliveryproject.entity.User;
 import com.example.deliveryproject.entity.DeliveryTariff;
@@ -93,6 +94,19 @@ public class PostingServiceImpl implements PostingService {
         postingRepository.deleteById(postingRepository.findIdByPostingNumber(postingNumber));
     }
 
+    @Override
+    public List<PostingDto> findPostingsBySenderID(Long senderID){
+        List<Posting> postings = postingRepository.findAllBySenderID(senderID);
+        return postings.stream().map((posting) -> convertEntityToDto(posting))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<PostingDto> findPostingsByReceiverID(Long receiverID){
+        List<Posting> postings = postingRepository.findAllByRecieverID(receiverID);
+        return postings.stream().map((posting) -> convertEntityToDto(posting))
+                .collect(Collectors.toList());
+    }
+
 //    @Override
 //    public DeliveryTariff findByTariffName(String tariffName) {
 //        return deliveryTariffRepository.findByTariffName(tariffName);
@@ -118,8 +132,11 @@ public class PostingServiceImpl implements PostingService {
 
         postingDto.setSenderEmail(posting.getSenderEmail());
         postingDto.setSenderID(posting.getSenderID());
+        postingDto.setOfficeFromID(posting.getOfficeFromID());
+
         postingDto.setRecieverEmail(posting.getRecieverEmail());
         postingDto.setRecieverID(posting.getRecieverID());
+        postingDto.setOfficeToID(posting.getOfficeToID());
         postingDto.setStatus(posting.getStatus());
         return postingDto;
     }

@@ -14,6 +14,8 @@ public interface PostingService {
     Posting getPostingByPostingNumber(String postingNumber);
 
     Posting updatePosting(Posting posting);
+    public List<PostingDto> findPostingsBySenderID(Long senderID);
+    public List<PostingDto> findPostingsByReceiverID(Long receiverID);
 
     void deletePostingByPostingNumber(String postingNumber);
 
