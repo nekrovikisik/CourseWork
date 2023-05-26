@@ -2,10 +2,7 @@ package com.example.deliveryproject.service.impl;
 
 import com.example.deliveryproject.dto.PostingDto;
 import com.example.deliveryproject.dto.UserDto;
-import com.example.deliveryproject.entity.Office;
-import com.example.deliveryproject.entity.Posting;
-import com.example.deliveryproject.entity.User;
-import com.example.deliveryproject.entity.DeliveryTariff;
+import com.example.deliveryproject.entity.*;
 
 import com.example.deliveryproject.repository.PostingRepository;
 import com.example.deliveryproject.repository.UserRepository;
@@ -73,7 +70,7 @@ public class PostingServiceImpl implements PostingService {
             posting.setOfficeTo(officeTo);
         }
 
-        posting.setStatus("Новый");
+//        posting.setStatus("Новый");
         postingRepository.save(posting);
     }
 
@@ -146,9 +143,16 @@ public class PostingServiceImpl implements PostingService {
         postingDto.setOfficeToLon(posting.getOfficeTo().getLongitude());
 
         postingDto.setCreatedAt(posting.getCreatedAt());
-        postingDto.setModifyAt(posting.getModifyAt());
+        PostingEvent lastEvent = posting.getLastEvent();
+        if(lastEvent != null){
+            postingDto.setModifyAt(posting.getLastEvent().getCreatedAt());
+            postingDto.setStatus(posting.getLastEvent().getPostingStatus().getStatusName());
+        }
+        else {
+            postingDto.setModifyAt(posting.getCreatedAt());
+            postingDto.setStatus("Создан");
+        }
 
-        postingDto.setStatus(posting.getStatus());
         return postingDto;
     }
 
