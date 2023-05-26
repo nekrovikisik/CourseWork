@@ -26,16 +26,41 @@ public class SpringSecurity {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        final String[] JS_WHITELIST = {
+                "/js/fill_posting_details.js",
+                "/js/fill_tracking_table.js",
+                "/js/show_map.js",
+                "/css/tracking.css"
+        };
+
         http.csrf().disable()
+
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/index").permitAll()
                                 .requestMatchers("/users/**").permitAll()//.hasRole("ADMIN")
+                                .requestMatchers("/testPostings**").permitAll()//.hasRole("ADMIN")
 //                                .requestMatchers("/?**").hasRole("ADMIN")
                                 .requestMatchers("/create-posting/**").hasRole("ADMIN")
                                 .requestMatchers("/offices/**").permitAll()
                                 .requestMatchers("/postings/**").permitAll()
-                                .requestMatchers("/").permitAll()
+                                .requestMatchers("/getWithMultipleRequestParams/**").permitAll()
+                                .requestMatchers("/test/**").permitAll()
+//РАБОТАЮТ БЛЯТЬ
+                                .requestMatchers("/getPostingDtoList").permitAll()
+                                .requestMatchers("/getUserDtoList").permitAll()
+                                .requestMatchers("/postings2").permitAll()
+                                .requestMatchers("/users2").permitAll()
+
+                                .requestMatchers("/getUserDto/**").permitAll()
+                                .requestMatchers("/getPostingDto/**").permitAll()
+
+                                .requestMatchers("/users2/**").permitAll()
+                                .requestMatchers("/getPostingEvents/**").permitAll()
+
+
+                                .requestMatchers(JS_WHITELIST).permitAll()
+
 //                ).anonymous(()
                 ).formLogin(
                         form -> form
@@ -47,7 +72,8 @@ public class SpringSecurity {
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
-                );
+                )
+        ;
         return http.build();
     }
 
