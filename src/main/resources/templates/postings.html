@@ -9,6 +9,7 @@
         crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script type = "text/JavaScript" src = " https://MomentJS.com/downloads/moment.js"></script>
+  <script src="/js/deleteEntity.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -74,10 +75,10 @@
     type: 'GET',
     dataType: 'json',
     success: function(postingDtoList) {
-      var postingRow;
+      var postingRow, postingNumber;
       for (var i in postingDtoList) {
-        console.log(i);
-        console.log(postingDtoList[i].postingNumber);
+        postingNumber = String(postingDtoList[i].postingNumber);
+        console.log(postingNumber)
         postingRow = '<tr>';
         postingRow += `<td> <a href="/postings/show/${postingDtoList[i].postingNumber}" target="_blank">
                                   ${postingDtoList[i].postingNumber}</a>
@@ -90,7 +91,7 @@
         postingRow += `<td> ${postingDtoList[i].status} </td>`;
         postingRow += `<td> ${moment(postingDtoList[i].createdAt).format('Do MMM YYYY')} </td>`;
         postingRow += `<td> <a href="/postings/edit/${postingDtoList[i].postingNumber}" class = "btn btn-primary">Update</a>
-                            <a href="/postings/delete/${postingDtoList[i].postingNumber}" class = "btn btn-danger">Delete</a> </td>`;
+                           <a onclick="deleteEntity('${postingDtoList[i].postingNumber}')" class = "btn btn-danger">Delete</a> </td>`;
         postingRow += '</tr>';
         $('#postingsTbody').append(postingRow);
 

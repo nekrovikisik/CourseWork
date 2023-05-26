@@ -1,7 +1,6 @@
 package com.example.deliveryproject.service.impl;
 
 import com.example.deliveryproject.dto.PostingDto;
-import com.example.deliveryproject.dto.UserDto;
 import com.example.deliveryproject.entity.*;
 
 import com.example.deliveryproject.repository.PostingRepository;
@@ -89,8 +88,14 @@ public class PostingServiceImpl implements PostingService {
     }
 
     @Override
-    public void deletePostingByPostingNumber(String postingNumber) {
-        postingRepository.deleteById(postingRepository.findIdByPostingNumber(postingNumber));
+    public boolean deletePostingByPostingNumber(String postingNumber) {
+        long id = postingRepository.findIdByPostingNumber(postingNumber);
+        if (postingRepository.existsById(id)) {
+            postingRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

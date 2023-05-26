@@ -33,6 +33,7 @@ public class SpringSecurity {
                 "/js/show_map.js",
                 "/js/regions.js",
                 "/js/fill_offices.js",
+                "/js/deleteEntity.js",
                 "/css/tracking.css"
         };
 
@@ -49,7 +50,6 @@ public class SpringSecurity {
                                         .requestMatchers("/postings/**").permitAll()
                                         .requestMatchers("/getWithMultipleRequestParams/**").permitAll()
                                         .requestMatchers("/test/**").permitAll()
-//РАБОТАЮТ БЛЯТЬ
                                         .requestMatchers("/getPostingDtoList").permitAll()
                                         .requestMatchers("/getUserDtoList").permitAll()
                                         .requestMatchers("/postings2").permitAll()

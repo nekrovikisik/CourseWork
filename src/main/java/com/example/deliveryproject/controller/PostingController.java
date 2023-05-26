@@ -8,6 +8,8 @@ import com.example.deliveryproject.repository.DeliveryTariffRepository;
 import com.example.deliveryproject.repository.OfficeRepository;
 import com.example.deliveryproject.service.PostingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -78,6 +80,15 @@ public class PostingController {
     @GetMapping("/postings")
     public String showListPostings(){
         return "postings";
+    }
+
+    @DeleteMapping("/postings/delete/{postingNumber}")
+    public ResponseEntity<String> deletePosting2(@PathVariable String postingNumber){
+        boolean isRemoved = postingService.deletePostingByPostingNumber(postingNumber);
+        if (!isRemoved) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(postingNumber, HttpStatus.OK);
     }
 
 

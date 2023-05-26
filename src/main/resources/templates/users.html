@@ -8,6 +8,7 @@
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
           crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/deleteEntity.js"></script>
 
 </head>
 <body>
@@ -78,7 +79,7 @@
                 userRow += `<td> ${userDtoList[i].lastName} </td>`;
                 userRow += `<td> ${userDtoList[i].email} </td>`;
                 userRow += `<td> <a href="/users/edit/${userDtoList[i].id}" class = "btn btn-primary">Update</a>
-                            <a href="/users/delete/${userDtoList[i].id}" class = "btn btn-danger">Delete</a> </td>`;
+                            <a onclick="deleteEntity('${userDtoList[i].id}')" class = "btn btn-danger">Delete</a> </td>`;
                 userRow += '</tr>';
                 $('#usersTbody').append(userRow);
 

@@ -1,29 +1,28 @@
 package com.example.deliveryproject.controller;
 
-import com.example.deliveryproject.dto.PostingDto;
+import com.example.deliveryproject.dto.UserDto;
 import com.example.deliveryproject.dto.UserDto;
 import com.example.deliveryproject.entity.User;
-import com.example.deliveryproject.repository.PostingRepository;
-import com.example.deliveryproject.service.PostingService;
+import com.example.deliveryproject.repository.UserRepository;
+import com.example.deliveryproject.service.UserService;
 import com.example.deliveryproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
 public class UserController {
     private UserService userService;
-    private PostingService postingService;
+    private UserService postingService;
     @Autowired
-    private PostingRepository postingRepository;
+    private UserRepository postingRepository;
 
-    public UserController(UserService userService, PostingService postingService) {
+    public UserController(UserService userService, UserService postingService) {
         this.userService = userService;
         this.postingService = postingService;
     }
@@ -70,5 +69,13 @@ public class UserController {
         return "edit_user2";
     }
 
+    @DeleteMapping("/users/delete/{userID}")
+    public ResponseEntity<Long> deleteUser2(@PathVariable Long userID){
+        boolean isRemoved = userService.deleteUserById(userID);
+        if (!isRemoved) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userID, HttpStatus.OK);
+    }
 
 }

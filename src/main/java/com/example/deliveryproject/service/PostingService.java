@@ -17,7 +17,7 @@ public interface PostingService {
     public List<PostingDto> findPostingsBySenderID(Long senderID);
     public List<PostingDto> findPostingsByReceiverID(Long receiverID);
 
-    void deletePostingByPostingNumber(String postingNumber);
+    boolean deletePostingByPostingNumber(String postingNumber);
 
 
 }
