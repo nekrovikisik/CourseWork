@@ -73,17 +73,6 @@ public class TestController {
         return "redirect:/users";
     }
 
-//    @PostMapping("/users2/{id}")
-//    public String updateUser2(@PathVariable Long id) {
-//
-//        // get user from database by id
-//        User existingUser = userService.getUserById(id);
-//        existingUser.setId(id);
-//        // save updated user object
-//        userService.updateUser(existingUser);
-//        return "redirect:/users";
-//    }
-
     @PostMapping("/users2/{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody String body) {
         System.out.println(body);
@@ -97,8 +86,6 @@ public class TestController {
         existingUser.setEmail(email);
         // save updated user object
         userService.updateUser(existingUser);
-        // handle the user update logic here
-        // you can access the user's firstName and email fields using user.getFirstName() and user.getEmail()
         return ResponseEntity.ok().build();
     }
 
@@ -122,49 +109,3 @@ public class TestController {
 
 }
 
-
-//    @GetMapping("/getPostingDtoList")
-//    public List<PostingDto> getProductsByCategory(@RequestParam("category") String category) {
-//        List<PostingDto> postingDtoList = postingService.findAllPostings();
-//        List<PostingDto> postingDtoList = new ArrayList<>();
-//        for (PostingDto postingDto : postingDtoList) {
-//            postingDtoList.add(new ProductDto(product));
-//        }
-//        return postingDtoList;
-//    }
-//}
-
-
-//curl -X GET 'http://localhost:8080/getWithMultipleRequestParams?postingNumber=1-1' -H 'Content-Type: application/json' -H 'Accept: application/json'
-
-
-
-//package com.example.deliveryproject.controller;
-//
-//import com.example.deliveryproject.dto.PostingDto;
-//import com.example.deliveryproject.service.PostingService;
-//import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//
-//@RestController
-////@EnableAutoConfiguration
-//public class TestController {
-//    private PostingService postingService;
-//    @GetMapping("/testPostings/{postingNumber}")
-//
-//    public PostingDto retrievePosting(@PathVariable String postingNumber) {
-//        System.out.println("Вызвала очко");
-//        PostingDto postingDto = postingService.findPostingDTOByPostingNumber(postingNumber);
-//        System.out.println(postingDto.getId());
-//
-//
-////        if (posting)
-////            throw new StudentNotFoundException("id-" + id);
-//
-//        return postingDto;
-//    }
-//
-//}
