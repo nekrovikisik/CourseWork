@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
->
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Delivery project</title>
@@ -9,6 +7,8 @@
         rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
         crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type = "text/JavaScript" src = " https://MomentJS.com/downloads/moment.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -19,28 +19,23 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <!--                <li class="nav-item">-->
-        <!--                    <a class="nav-link active" aria-current="page" th:href="@{/register}">Register</a>-->
-        <!--                </li>-->
-        <!--        <a class="navbar-brand" href="#">Delivery project</a>-->
-
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" th:href="@{/}">CompanyName</a>
+          <a class="nav-link active" aria-current="page" href="/">CompanyName</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" th:href="@{/create-posting}">Create posting</a>
+          <a class="nav-link active" aria-current="page" href="/create-posting">Create posting</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" th:href="@{/users}">Users</a>
+          <a class="nav-link active" aria-current="page" href="/users">Users</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" th:href="@{/postings}">Postings</a>
+          <a class="nav-link active" aria-current="page" href="/postings">Postings</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" th:href="@{/offices}">Our offices</a>
+          <a class="nav-link active" aria-current="page" href="/offices">Our offices</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" th:href="@{/logout}">Logout</a>
+          <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
         </li>
 
 
@@ -52,7 +47,7 @@
   <div class="row">
     <h1> Список постингов </h1>
   </div>
-  <table class="table table-striped table-bordered table-hover">
+  <table class="table table-striped table-bordered table-hover" id="tablePostings">
     <thead class="table-dark">
     <tr>
       <th>Номер постинга</th>
@@ -66,33 +61,47 @@
       <th>Действие</th>
     </tr>
     </thead>
-    <tbody>
-    <tr th:each="posting: ${postings}">
-      <td>
-        <a th:href="@{/postings/show/{postingNumber}(postingNumber=${posting.postingNumber})}"
-           th:text="${posting.postingNumber}"
-           target="_blank" />
-      </td>
-      <td th:text="${posting.tariffName}"></td>
-      <td th:text="${posting.senderName}"></td>
-      <td th:text="${posting.receiverName}"></td>
-      <td th:text="${posting.officeFromName}"></td>
-      <td th:text="${posting.officeToName}"></td>
-      <td th:text="${posting.status}"></td>
-      <td th:text="${posting.createdAt}"></td>
-      <td>
-        <a th:href="@{/postings/edit/{postingNumber}(postingNumber=${posting.postingNumber})}"
-           class = "btn btn-primary">Update</a>
+    <tbody id="postingsTbody">
 
-        <!--                    todo: реализовать нормальное удаление-->
-        <a th:href="@{/postings/delete{postingNumber}(id=${posting.postingNumber})}"
-           class = "btn btn-danger">Delete</a>
-
-      </td>
-
-    </tr>
     </tbody>
   </table>
 </div>
+
+<script>
+
+  $.ajax({
+    url: '/getPostingDtoList',
+    type: 'GET',
+    dataType: 'json',
+    success: function(postingDtoList) {
+      var postingRow;
+      for (var i in postingDtoList) {
+        console.log(i);
+        console.log(postingDtoList[i].postingNumber);
+        postingRow = '<tr>';
+        postingRow += `<td> <a href="/postings/show/${postingDtoList[i].postingNumber}" target="_blank">
+                                  ${postingDtoList[i].postingNumber}</a>
+                            </td>`;
+        postingRow += `<td> ${postingDtoList[i].tariffName} </td>`;
+        postingRow += `<td> ${postingDtoList[i].senderName} </td>`;
+        postingRow += `<td> ${postingDtoList[i].receiverName} </td>`;
+        postingRow += `<td> ${postingDtoList[i].officeFromName} </td>`;
+        postingRow += `<td> ${postingDtoList[i].officeToName} </td>`;
+        postingRow += `<td> ${postingDtoList[i].status} </td>`;
+        postingRow += `<td> ${moment(postingDtoList[i].createdAt).format('Do MMM YYYY')} </td>`;
+        postingRow += `<td> <a href="/postings/edit/${postingDtoList[i].postingNumber}" class = "btn btn-primary">Update</a>
+                            <a href="/postings/delete/${postingDtoList[i].postingNumber}" class = "btn btn-danger">Delete</a> </td>`;
+        postingRow += '</tr>';
+        $('#postingsTbody').append(postingRow);
+
+      }
+    },
+      error: function() {
+        alert('Произошла ошибка, иди нахуй');
+      }
+    });
+
+</script>
+
 </body>
 </html>
