@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.ArrayList;
+
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -29,36 +31,48 @@ public class Posting
     @Column(nullable=false, unique=true)
     private String postingNumber;
 
-    @Column(nullable=true)
-    private String status;
-
     @Column()
-    @CreationTimestamp
     private Date createdAt;
+    @Transient
+    private boolean autoFillCreatedAt = true;
+    public void setAutoFillCreatedAt(boolean autoFillCreatedAt) {
+        this.autoFillCreatedAt = autoFillCreatedAt;
+        if (autoFillCreatedAt && createdAt == null) {
+            createdAt = new Date();
+        }
+    }
+
     @Column()
     @UpdateTimestamp
     private Date modifyAt;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinTable(
-            name="tie_postings_senders",
-            joinColumns={@JoinColumn(name="SENDER_ID", referencedColumnName="ID")},
-            inverseJoinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")})
-    private List<User> users = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
     private DeliveryTariff deliveryTariff = new DeliveryTariff();
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
     private User sender = new User();
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
     private User receiver = new User();
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
     private Office officeFrom = new Office();
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
     private Office officeTo = new Office();
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<PostingEvent> postingEvents;
+
+    public PostingEvent getLastEvent(){
+        PostingEvent lastEvent = postingEvents.stream()
+            .max(Comparator.comparing(PostingEvent::getCreatedAt)).orElse(null);
+        return lastEvent;
+    }
+//
+//    @ManyToMany(mappedBy = "postings")
+//    private List<PostingStatus> postingStatuses;
+
+
+//    private Queue<PostingStatus> postingStatuses = new LinkedList<PostingStatus>();
 }
