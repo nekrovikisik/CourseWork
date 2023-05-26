@@ -60,16 +60,12 @@ public class CreatePostingController {
         return "redirect:/create-posting?success";
     }
 
+
     @GetMapping("/offices")
-    public String displayOfficesOnMap(Model model){
-        List regions = officeRepository.findAllRegions();
-        List offices = officeRepository.findAll();
-//        System.out.println(offices.size());
-//        System.out.println(offices.get(1));
-        model.addAttribute("regions", regions);
-        model.addAttribute("offices", offices);
+    public String displayOfficesOnMap(){
         return "offices";
     }
+
 
 //    @GetMapping("/test")
 //    public String testLeaflet(Model model){

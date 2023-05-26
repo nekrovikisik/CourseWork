@@ -1,171 +1,118 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
->
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Delivery project</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-        crossorigin="anonymous">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <meta charset="UTF-8">
+    <title>Delivery project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/fill_offices.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
 </head>
 
 <body>
-<script>
-  function myFunction() {
-  var region_inp, region_filter, table, table_row, region_td, i;
-  region_inp = document.getElementById("region_filter");
-  region_filter = region_inp.value.toUpperCase();
-  table = document.getElementById("office_table");
-  table_row = table.getElementsByTagName("tr");
-  if ((region_filter) !== "Все регионы России".toUpperCase()) {
-    for (i = 0; i < table_row.length; i++) {
-      region_td = table_row[i].getElementsByTagName("td")[0];
-      if (region_td) {
-        if (region_td.innerHTML.toUpperCase() === region_filter) {
-          table_row[i].style.display = "";
-        } else {
-          table_row[i].style.display = "none";
-        }
-      }
-    }
-  }
-}
-</script>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Delivery project</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">CompanyName</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/create-posting">Create posting</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/users">Users</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/postings">Postings</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/offices">Our offices</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
-        </li>
-      </ul>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Delivery project</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">CompanyName</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/create-posting">Create posting</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/users">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/postings">Postings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/offices">Our offices</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
 
 <style type="text/css">
-  #map {
-    height: 500px;
-    width: 80%;
-  }
+    #map {
+        height: 500px;
+        width: 80%;
+    }
 </style>
 </head>
 
 <div class="container">
-  <div class="row">
-    <h1> Список ПВЗ </h1>
-  </div>
-
-
-  <div class="table-filter">
     <div class="row">
-      <div class="col-sm-3">
-        <div class="show-entries">
-          <span>Show</span>
-          <select class="form-control">
-            <option>10</option>
-            <option>20</option>
-            <option>50</option>
-            <option>100</option>
-          </select>
-          <span>entries</span>
-        </div>
-      </div>
-      <div class="col-sm-9">
-        <div class="filter-group" >
-          <label>Region</label>
-          <select id="region_filter" onchange="myFunction()" class='form-control' >
-            <option>Все регионы России</option>
-            <option th:each="region : ${regions}"
-                    th:value="${region}"
-                    th:text="${region}">
-            </option>
-          </select>
-        </div>
-        <span class="filter-icon"><i class="fa fa-filter"></i></span>
-      </div>
+        <h1> Список ПВЗ </h1>
     </div>
-  </div>
-  <br>
-  <br>
-  <div class="row">
-    <h3> Наши ПВЗ на карте - мы есть в каждом городе России! </h3>
-  </div>
 
-  <div id="map"></div>
+    <script src="/js/regions.js"></script>
 
-<!--todo: динамически убирать маркеры с карты-->
-  <script th:inline="javascript">
-    var dataLayer = [];
-    var fullOfficeName, longitude, latitude, region;
-    // var region_inp = document.getElementById("region_filter");
-    // var region_filter = region_inp.value.toUpperCase();
+    <div class="table-filter">
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="filter-group">
+                    <label>Region</label>
+                    <select id="region_filter" onchange="fill_offices()" class='form-control'>
+                        <option>Все регионы России</option>
+                    </select>
+                </div>
+                <span class="filter-icon"><i class="fa fa-filter"></i></span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <h3> Наши ПВЗ на карте - мы есть в каждом городе России! </h3>
+    </div>
 
-    const map = L.map('map').setView([66.25, 94.15], 5);
-    L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-  </script>
+    <div id="map"></div>
+    <script defer>
+        var map = L.map('map').setView([55, 37], 3);
+        L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        fill_offices();
+    </script>
 
-  <script th:each="office:${offices}" th:inline="javascript">
+    <br>
+    <div class="row">
+        <h3> Таблица с ПВЗ </h3>
+    </div>
 
-    fullOfficeName = [[${office.fullOfficeName}]];
-    longitude = [[${office.longitude}]];
-    latitude = [[${office.latitude}]];
-    region = [[${office.region}]];
-    if (region.toUpperCase() === region_filter)
-    dataLayer.push({'longitude':longitude,
-                    'latitude':latitude,
-                    'fullOfficeName':fullOfficeName});
-    L.marker([latitude, longitude]).addTo(map).bindPopup(fullOfficeName);
-  </script>
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>Регион</th>
+            <th>Район</th>
+            <th>Город</th>
+        </tr>
+        </thead>
+        <tbody id="officesTbody">
 
-  <br>
-  <div class="row">
-    <h3> Таблица с ПВЗ </h3>
-  </div>
 
-  <table class="table table-striped table-bordered table-hover" id="office_table">
-    <thead class="table-dark">
-    <tr>
-      <th>Регион</th>
-      <th>Район</th>
-      <th>Город</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="office: ${offices}">
-      <td th:text="${office.region}"></td>
-      <td th:text="${office.municipality}"></td>
-      <td th:text="${office.settlement}"></td>
-    </tr>
-    </tbody>
-  </table>
+        </tbody>
+    </table>
 </div>
+
 
 </body>
 </html>

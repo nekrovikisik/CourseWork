@@ -20,7 +20,7 @@ public class SpringSecurity {
     private UserDetailsService userDetailsService;
 
     @Bean
-    public static PasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -31,36 +31,40 @@ public class SpringSecurity {
                 "/js/fill_tracking_table.js",
                 "/js/fill_postings_by_user.js",
                 "/js/show_map.js",
+                "/js/regions.js",
+                "/js/fill_offices.js",
                 "/css/tracking.css"
         };
 
         http.csrf().disable()
 
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/register/**").permitAll()
-                                .requestMatchers("/index").permitAll()
-                                .requestMatchers("/users/**").permitAll()//.hasRole("ADMIN")
-                                .requestMatchers("/testPostings**").permitAll()//.hasRole("ADMIN")
+                                authorize.requestMatchers("/register/**").permitAll()
+                                        .requestMatchers("/index").permitAll()
+                                        .requestMatchers("/users/**").permitAll()//.hasRole("ADMIN")
+                                        .requestMatchers("/testPostings**").permitAll()//.hasRole("ADMIN")
 //                                .requestMatchers("/?**").hasRole("ADMIN")
-                                .requestMatchers("/create-posting/**").hasRole("ADMIN")
-                                .requestMatchers("/offices/**").permitAll()
-                                .requestMatchers("/postings/**").permitAll()
-                                .requestMatchers("/getWithMultipleRequestParams/**").permitAll()
-                                .requestMatchers("/test/**").permitAll()
+                                        .requestMatchers("/create-posting/**").hasRole("ADMIN")
+                                        .requestMatchers("/offices/**").permitAll()
+                                        .requestMatchers("/postings/**").permitAll()
+                                        .requestMatchers("/getWithMultipleRequestParams/**").permitAll()
+                                        .requestMatchers("/test/**").permitAll()
 //РАБОТАЮТ БЛЯТЬ
-                                .requestMatchers("/getPostingDtoList").permitAll()
-                                .requestMatchers("/getUserDtoList").permitAll()
-                                .requestMatchers("/postings2").permitAll()
+                                        .requestMatchers("/getPostingDtoList").permitAll()
+                                        .requestMatchers("/getUserDtoList").permitAll()
+                                        .requestMatchers("/postings2").permitAll()
 
-                                .requestMatchers("/getUserDto/**").permitAll()
-                                .requestMatchers("/getPostingDto/**").permitAll()
+                                        .requestMatchers("/getUserDto/**").permitAll()
+                                        .requestMatchers("/getPostingDto/**").permitAll()
 
-                                .requestMatchers("/getPostingEvents/**").permitAll()
-                                .requestMatchers("/getPostingsBySenderId/**").permitAll()
-                                .requestMatchers("/getPostingsByReceiverId/**").permitAll()
+                                        .requestMatchers("/getPostingEvents/**").permitAll()
+                                        .requestMatchers("/getPostingsBySenderId/**").permitAll()
+                                        .requestMatchers("/getPostingsByReceiverId/**").permitAll()
+                                        .requestMatchers("/getOfficesByRegion/**").permitAll()
+                                        .requestMatchers("/getRegionList").permitAll()
 
 
-                                .requestMatchers(JS_WHITELIST).permitAll()
+                                        .requestMatchers(JS_WHITELIST).permitAll()
 
 //                ).anonymous(()
                 ).formLogin(

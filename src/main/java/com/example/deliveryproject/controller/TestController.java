@@ -1,15 +1,22 @@
 package com.example.deliveryproject.controller;
+
+import com.example.deliveryproject.dto.OfficeDto;
 import com.example.deliveryproject.dto.PostingDto;
 import com.example.deliveryproject.dto.PostingEventDto;
 import com.example.deliveryproject.dto.UserDto;
+import com.example.deliveryproject.entity.Office;
 import com.example.deliveryproject.entity.User;
+import com.example.deliveryproject.repository.OfficeRepository;
+import com.example.deliveryproject.service.OfficeService;
 import com.example.deliveryproject.service.PostingEventService;
 import com.example.deliveryproject.service.PostingService;
 import com.example.deliveryproject.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,12 +24,18 @@ public class TestController {
     private PostingService postingService;
     private UserService userService;
     private PostingEventService postingEventService;
+    private OfficeService officeService;
 
-    public TestController(PostingService postingService, UserService userService, PostingEventService postingEventService) {
+    @Autowired
+    OfficeRepository officeRepository;
+
+    public TestController(PostingService postingService, UserService userService, PostingEventService postingEventService, OfficeService officeService) {
         this.postingService = postingService;
         this.userService = userService;
         this.postingEventService = postingEventService;
+        this.officeService = officeService;
     }
+
     private static String getValueFromJsonString(String jsonString, String fieldName) {
         int startIndex = jsonString.indexOf(fieldName) + fieldName.length() + 3;
         int endIndex = jsonString.indexOf("\"", startIndex);
@@ -59,9 +72,7 @@ public class TestController {
     }
 
     @PostMapping("/users/edit/{id}")
-    public String updateUser(@PathVariable Long id,
-                             @ModelAttribute("user") User user,
-                             Model model) {
+    public String updateUser(@PathVariable Long id, @ModelAttribute("user") User user, Model model) {
 
         // get user from database by id
         User existingUser = userService.getUserById(id);
@@ -95,6 +106,7 @@ public class TestController {
         List<PostingEventDto> postingEventDtos = postingEventService.findEventsDtoByPostingNumber(postingNumber);
         return postingEventDtos;
     }
+
     @GetMapping("/getPostingsBySenderId/{senderId}")
     public List<PostingDto> getPostingsBySenderId(@PathVariable Long senderId) {
         List<PostingDto> postingDtos = postingService.findPostingsBySenderID(senderId);
@@ -105,6 +117,23 @@ public class TestController {
     public List<PostingDto> getPostingsByReceiverId(@PathVariable Long receiverId) {
         List<PostingDto> postingDtos = postingService.findPostingsByReceiverID(receiverId);
         return postingDtos;
+    }
+
+    @GetMapping("/getOfficesByRegion/{region}")
+    public List<OfficeDto> getOfficesByRegion(@PathVariable String region) {
+        List<OfficeDto> officeDtoList;
+        if (region.equals(new String("Все регионы России"))) {
+            officeDtoList = officeService.findAll();
+        } else {
+            officeDtoList = officeService.findOfficeDtoByRegion(region);
+        }
+        return officeDtoList;
+    }
+
+    @GetMapping("/getRegionList")
+    public List<String> getRegions() {
+        System.out.println("Ищу регионы");
+        return officeRepository.findAllRegions();
     }
 
 }
