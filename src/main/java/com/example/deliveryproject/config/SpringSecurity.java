@@ -29,6 +29,7 @@ public class SpringSecurity {
         final String[] JS_WHITELIST = {
                 "/js/fill_posting_details.js",
                 "/js/fill_tracking_table.js",
+                "/js/fill_postings_by_user.js",
                 "/js/show_map.js",
                 "/css/tracking.css"
         };
@@ -50,13 +51,13 @@ public class SpringSecurity {
                                 .requestMatchers("/getPostingDtoList").permitAll()
                                 .requestMatchers("/getUserDtoList").permitAll()
                                 .requestMatchers("/postings2").permitAll()
-                                .requestMatchers("/users2").permitAll()
 
                                 .requestMatchers("/getUserDto/**").permitAll()
                                 .requestMatchers("/getPostingDto/**").permitAll()
 
-                                .requestMatchers("/users2/**").permitAll()
                                 .requestMatchers("/getPostingEvents/**").permitAll()
+                                .requestMatchers("/getPostingsBySenderId/**").permitAll()
+                                .requestMatchers("/getPostingsByReceiverId/**").permitAll()
 
 
                                 .requestMatchers(JS_WHITELIST).permitAll()
