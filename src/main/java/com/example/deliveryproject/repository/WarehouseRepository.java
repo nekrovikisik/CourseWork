@@ -8,7 +8,6 @@ import java.util.List;
 public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
     Warehouse findByFullWarehouseName(String fullWarehouseName);
 
-    // TODO: 07.05.2023 сделать фильтрацию по региону (вроде сделала)
     List<Warehouse> findAllByRegion(String region);
 
 }
