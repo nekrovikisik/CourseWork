@@ -50,8 +50,8 @@ public class User
             inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
     private List<Role> roles = new ArrayList<>();
 
-    @ManyToMany(mappedBy="users")
-    private List<Posting> postings;
+//    @ManyToMany(mappedBy="users")
+//    private List<Posting> postings;
 
     @OneToMany(mappedBy = "sender")
     private List<Posting> sentPostings = new ArrayList<>();
