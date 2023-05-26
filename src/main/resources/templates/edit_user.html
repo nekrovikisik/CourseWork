@@ -12,7 +12,8 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
+
   <div class="container-fluid">
     <!--        <a class="navbar-brand" href="#">Delivery project</a>-->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,44 +54,41 @@
 <div class="container">
   <div class="row col-md-8 offset-md-2">
     <div class="card">
-      <div th:if="${param.success}">
-        <div class="alert alert-info">Вы обновили данные!</div>
-      </div>
-      <div class="card-header">
-        <h2 class="text-center">Обновить данные о пользователе</h2>
-      </div>
-      <div class="card-body">
+    </div>
+    <div class="card-header">
+      <h2 class="text-center">Обновить данные о пользователе</h2>
+    </div>
+    <div class="card-body">
 
-        <form method="post" th:action="@{/users/{id} (id=${user.id})}" th:object = "${user}">
-          <div class ="form-group">
-            <label> Имя пользователя </label>
-            <input
-                    class = "form-control"
-                    name = "firstName"
-                    th:field = "*{name}"
-                    placeholder="Введите имя пользователя"
-                    type = "text"
-            />
-          </div>
+      <form method="post" th:action="@{/users/{id} (id=${user.id})}" th:object = "${user}">
+        <div class ="form-group">
+          <label> Имя пользователя </label>
+          <input
+                  class = "form-control"
+                  name = "firstName"
+                  th:field = "*{name}"
+                  placeholder="Введите имя пользователя"
+                  type = "text"
+          />
+        </div>
 
-          <div class ="form-group">
-            <label> user Email </label>
-            <input class="form-control"
-                   id="email"
-                   name="email"
-                   th:field = "*{email}"
-                   placeholder="Введите email пользователя"
-                   type="email"
-            />
-          </div>
+        <div class ="form-group">
+          <label> user Email </label>
+          <input class="form-control"
+                 id="email"
+                 name="email"
+                 th:field = "*{email}"
+                 placeholder="Введите email пользователя"
+                 type="email"
+          />
+        </div>
 
-          <div class = "box-footer">
-            <button type="submit" class = "btn btn-primary">
-              Submit
-            </button>
-          </div>
-        </form>
-      </div>
+        <div class = "box-footer">
+          <button type="submit" class = "btn btn-primary">
+            Submit
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

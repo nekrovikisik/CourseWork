@@ -62,6 +62,7 @@
       <th>ПВЗ отправления</th>
       <th>ПВЗ получения</th>
       <th>Статус</th>
+      <th>Дата создания</th>
       <th>Действие</th>
     </tr>
     </thead>
@@ -78,6 +79,7 @@
       <td th:text="${posting.officeFromName}"></td>
       <td th:text="${posting.officeToName}"></td>
       <td th:text="${posting.status}"></td>
+      <td th:text="${posting.createdAt}"></td>
       <td>
         <a th:href="@{/postings/edit/{postingNumber}(postingNumber=${posting.postingNumber})}"
            class = "btn btn-primary">Update</a>
