@@ -29,9 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String listRegisteredUsers(Model model){
-        List<UserDto> users = userService.findAllUsers();
-        model.addAttribute("users", users);
+    public String listRegisteredUsers(){
         return "users";
     }
     @GetMapping("/users/edit/{id}")
@@ -60,27 +58,10 @@ public class UserController {
         userService.deleteUserById(id);
         return "redirect:/users";
     }
+
     @GetMapping("/users/show/{id}")
-    public String showUser(@PathVariable Long id, Model model) {
-//        List postings = postingRepository.findAllBySenderID(id);
-        List<PostingDto> postingsFrom = postingService.findPostingsBySenderID(id);
-        List<PostingDto> postingsTo = postingService.findPostingsByReceiverID(id);
-
-        model.addAttribute("user", userService.findDtoById(id));
-        model.addAttribute("postingsFrom", postingsFrom);
-        model.addAttribute("postingsTo", postingsTo);
+    public String showUser(@PathVariable Long id) {
         return "show_user";
-    }
-
-    @GetMapping("/users2")
-    public String testListRegisteredUsers(){
-        return "users2";
-    }
-
-    @GetMapping("/users/show2/{id}")
-    public String testShowUser(@PathVariable Long id) {
-//        List postings = postingRepository.findAllBySenderID(id);
-        return "show_user2";
     }
 
 

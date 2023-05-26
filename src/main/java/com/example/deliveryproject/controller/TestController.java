@@ -108,6 +108,17 @@ public class TestController {
         List<PostingEventDto> postingEventDtos = postingEventService.findEventsDtoByPostingNumber(postingNumber);
         return postingEventDtos;
     }
+    @GetMapping("/getPostingsBySenderId/{senderId}")
+    public List<PostingDto> getPostingsBySenderId(@PathVariable Long senderId) {
+        List<PostingDto> postingDtos = postingService.findPostingsBySenderID(senderId);
+        return postingDtos;
+    }
+
+    @GetMapping("/getPostingsByReceiverId/{receiverId}")
+    public List<PostingDto> getPostingsByReceiverId(@PathVariable Long receiverId) {
+        List<PostingDto> postingDtos = postingService.findPostingsByReceiverID(receiverId);
+        return postingDtos;
+    }
 
 }
 

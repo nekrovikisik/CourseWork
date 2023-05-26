@@ -12,8 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -29,13 +27,6 @@ public class PostingController {
 
     public PostingController(PostingService postingService) {
         this.postingService = postingService;
-    }
-
-    @GetMapping("/postings")
-    public String listPostings(Model model){
-        List<PostingDto> postings = postingService.findAllPostings();
-        model.addAttribute("postings", postings);
-        return "postings";
     }
 
     @GetMapping("/postings/edit/{postingNumber}")
@@ -80,20 +71,13 @@ public class PostingController {
     }
 
     @GetMapping("/postings/show/{postingNumber}")
-    public String showPosting(@PathVariable String postingNumber, Model model) {
-        PostingDto posting = postingService.findPostingDTOByPostingNumber(postingNumber);
-        model.addAttribute("posting", posting);
+    public String test_page(@PathVariable String postingNumber) {
         return "show_posting";
     }
 
-    @GetMapping("/postings/show2/{postingNumber}")
-    public String test_page(@PathVariable String postingNumber) {
-        return "show_posting2";
-    }
-
-    @GetMapping("/postings2")
-    public String test_postings(){
-        return "postings2";
+    @GetMapping("/postings")
+    public String showListPostings(){
+        return "postings";
     }
 
 
