@@ -72,4 +72,22 @@ public class UserController {
         return "show_user";
     }
 
+    @GetMapping("/users2")
+    public String testListRegisteredUsers(){
+        return "users2";
+    }
+
+    @GetMapping("/users/show2/{id}")
+    public String testShowUser(@PathVariable Long id) {
+//        List postings = postingRepository.findAllBySenderID(id);
+        return "show_user2";
+    }
+
+
+    @GetMapping("/users/edit2/{id}")
+    public String editUserForm(@PathVariable Long id) {
+        return "edit_user2";
+    }
+
+
 }

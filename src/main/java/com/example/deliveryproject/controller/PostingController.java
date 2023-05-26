@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -83,5 +85,16 @@ public class PostingController {
         model.addAttribute("posting", posting);
         return "show_posting";
     }
+
+    @GetMapping("/postings/show2/{postingNumber}")
+    public String test_page(@PathVariable String postingNumber) {
+        return "show_posting2";
+    }
+
+    @GetMapping("/postings2")
+    public String test_postings(){
+        return "postings2";
+    }
+
 
 }
