@@ -17,7 +17,7 @@ function fill_postings_by_user(postingDtoList, param, tag){
             postingRow += `<td> ${postingDtoList[i].officeToName} </td>`;
             postingRow += `<td> ${postingDtoList[i].status} </td>`;
             postingRow += `<td> ${moment(postingDtoList[i].createdAt).format('Do MMM YYYY')} </td>`;
-            postingRow += `<td> <a href="/postings/edit/${postingDtoList[i].postingNumber}" class = "btn btn-primary">Update</a>
+            postingRow += `<td> 
                             <a href="/postings/delete/${postingDtoList[i].postingNumber}" class = "btn btn-danger">Delete</a> </td>`;
             postingRow += '</tr>';
             $(`#${tag}`).append(postingRow);

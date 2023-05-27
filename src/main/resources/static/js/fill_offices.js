@@ -31,7 +31,7 @@ function fill_offices() {
             }
         },
         error: function () {
-            alert('Произошла ошибка, иди нахуй');
+            alert('Произошла ошибка');
         }
     });
 }
