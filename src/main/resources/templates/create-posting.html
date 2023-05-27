@@ -1,178 +1,144 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
->
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Delivery project</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-        crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Delivery project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/fill_officeFromTo.js"></script>
+    <script src="/js/createPosting.js"></script>
+    <script src="/js/checkUserExists.js"></script>
+
 </head>
 <body>
-<script>
-    function myFunction(s) {
-        var region_inp, region_filter, officeFrom_list, region_td, i;
-        region_inp = document.getElementById(`region${s}`);
-        region_filter = region_inp.value.toUpperCase();
-        officeFrom_list = document.getElementById(`office${s}`);
-        console.log(officeFrom_list);
-        for (i = 0; i < officeFrom_list.length; i++) {
-            region_td = officeFrom_list[i].value;
-
-            if (region_td.toUpperCase().indexOf(region_filter) > -1) {
-                console.log(1)
-                // officeFrom_list[i].style.display = "block";
-            } else {
-                console.log(0)
-                // officeFrom_list[i].style.display = "none";
-            }
-
-        }
-    }
-</script>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Delivery project</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">CompanyName</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/create-posting">Create posting</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/users">Users</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/postings">Postings</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/offices">Our offices</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
-          </li>
-      </ul>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Delivery project</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">CompanyName</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/create-posting">Create posting</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/users">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/postings">Postings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/offices">Our offices</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
 
 
 <div class="container">
-  <div class="row col-md-8 offset-md-2">
-    <div class="card">
-      <div th:if="${param.success}">
-        <div class="alert alert-info">Вы создали постинг</div>
-      </div>
-      <div class="card-header">
-        <h2 class="text-center">Отправить посылку</h2>
-      </div>
-      <div class="card-body">
-        <form method="post" role="form" th:action="@{/create-posting/save}" th:object="${posting}">
-
-          <div class="form-group mb-3">
-            <label class="form-label">Тариф доставки</label>
-          <select id="tariffName" th:field="*{tariffName}">
-<!--            <option value="" th:text="#{common.select.prompt}"></option>-->
-            <option th:each="deliveryTariff : ${deliveryTariffs}"
-                    th:value="${deliveryTariff}"
-                    th:text="${deliveryTariff}">
-            </option>
-          </select>
-          </div>
-
-          <div class="form-group mb-3">
-            <label class="form-label">Email отправителя</label>
-            <input class="form-control"
-                   id="SenderEmail"
-                   name="SenderEmail"
-                   placeholder="Введите электронную почту"
-                   th:field="*{senderEmail}"
-                   type="email"
-            />
-            <p th:errors="*{senderEmail}" class="text-danger"
-               th:if="${#fields.hasErrors('senderEmail')}">
-            </p>
-          </div>
-
-
-            <div class="form-group">
-                <label>Регион отправления</label>
-                <select id="regionFrom" onchange="myFunction(s='From')">
-                    <!--                <label for="region">Регион отправления</label>-->
-<!--                <select id="region" th:field="*{regions}">-->
-                    <!--            <option value="" th:text="#{common.select.prompt}"></option>-->
-                    <option th:each="regionFrom : ${regions}"
-                            th:value="${regionFrom}"
-                            th:text="${regionFrom}">
-                    </option>
-                </select>
+    <div class="row col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">Отправить посылку</h2>
             </div>
+            <div class="card-body">
+                <form>
 
-            <div class="form-group mb-3">
-                <label class="form-label">ПВЗ отправления</label>
-                <select id="officeFrom" th:field="*{officeFromName}">
-                    <!--            <option value="" th:text="#{common.select.prompt}"></option>-->
-                    <option th:each="officeFrom : ${offices}"
-                            th:value="${officeFrom.fullOfficeName}"
-                            th:text="${officeFrom.fullOfficeName}">
-                    </option>
-                </select>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Тариф доставки</label>
+                        <select id="tariffName" required>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Email отправителя</label>
+                        <input class="form-control"
+                               id="SenderEmail"
+                               placeholder="Введите электронную почту"
+                               type="email"
+                               required
+                        />
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Регион отправления</label>
+                        <select id="regionFrom" onchange="fill_officeFromTo(s='From')" required>
+
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">ПВЗ отправления</label>
+                        <select id="officeFrom" required>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Email получателя</label>
+                        <input class="form-control"
+                               id="ReceiverEmail"
+                               placeholder="Введите электронную почту "
+                               type="email"
+                               required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Регион получения</label>
+                        <select id="regionTo" onchange="fill_officeFromTo('To')" required>
+
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label" required>ПВЗ получения</label>
+                        <select id="officeTo">
+
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <a class="btn btn-primary" onclick="createPosting()">Create</a>
+                    </div>
+
+                </form>
+
             </div>
-
-            <div class="form-group mb-3">
-            <label class="form-label">Email получателя</label>
-            <input class="form-control"
-                   id="ReceiverEmail"
-                   name="ReceiverEmail"
-                   placeholder="Введите электронную почту "
-                   th:field="*{receiverEmail}"
-                   type="email"
-            />
-            <p th:errors="*{receiverEmail}" class="text-danger"
-               th:if="${#fields.hasErrors('receiverEmail')}">
-            </p>
-          </div>
-
-            <div class="form-group">
-                <label>Регион получения</label>
-                <select id="regionTo" onchange="myFunction(s='To')">
-
-                    <!--                <label for="region">Регион отправления</label>-->
-                    <!--                <select id="region" th:field="*{regions}">-->
-                    <!--            <option value="" th:text="#{common.select.prompt}"></option>-->
-                    <option th:each="regionTo : ${regions}"
-                            th:value="${regionTo}"
-                            th:text="${regionTo}">
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-group mb-3">
-                <label class="form-label">ПВЗ получения</label>
-                <select id="officeTo" th:field="*{officeToName}">
-                    <!--            <option value="" th:text="#{common.select.prompt}"></option>-->
-                    <option th:each="officeTo : ${offices}"
-                            th:value="${officeTo.fullOfficeName}"
-                            th:text="${officeTo.fullOfficeName}">
-                    </option>
-                </select>
-            </div>
-            <div class="form-group mb-3">
-                <button class="btn btn-primary" type="submit">Create</button>
-            </div>
-
-        </form>
-
-      </div>
+        </div>
     </div>
-  </div>
+
+    <script src="/js/regions.js"></script>
+
+    <script>
+        $.ajax({
+            url: '/getTariffList',
+            type: 'GET',
+            dataType: 'json',
+            success: function (tariffList) {
+                var tariffRow;
+                for (var i in tariffList) {
+                    tariffRow = `<option> ${tariffList[i]} </option>`;
+                    $('#tariffName').append(tariffRow);
+                }
+            },
+            error: function (e) {
+                console.log(e)
+            }
+        });
+    </script>
+
 
 </div>
 

@@ -3,15 +3,14 @@ package com.example.deliveryproject.service.impl;
 import com.example.deliveryproject.dto.PostingDto;
 import com.example.deliveryproject.entity.*;
 
-import com.example.deliveryproject.repository.PostingRepository;
-import com.example.deliveryproject.repository.UserRepository;
-import com.example.deliveryproject.repository.DeliveryTariffRepository;
-import com.example.deliveryproject.repository.OfficeRepository;
+import com.example.deliveryproject.repository.*;
 
 import com.example.deliveryproject.service.PostingService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,22 +20,23 @@ public class PostingServiceImpl implements PostingService {
     private DeliveryTariffRepository deliveryTariffRepository;
 
     private OfficeRepository officeRepository;
+    private PostingStatusRepository postingStatusRepository;
 
     public PostingServiceImpl (PostingRepository postingRepository,
                                UserRepository userRepository,
                                DeliveryTariffRepository deliveryTariffRepository,
-                               OfficeRepository officeRepository) {
+                               OfficeRepository officeRepository,
+                               PostingStatusRepository postingStatusRepository) {
         this.postingRepository = postingRepository;
         this.userRepository = userRepository;
         this.deliveryTariffRepository = deliveryTariffRepository;
         this.officeRepository = officeRepository;
+        this.postingStatusRepository = postingStatusRepository;
     }
 
     @Override
     public void savePosting(PostingDto postingDto) {
         Posting posting = new Posting();
-//        Порядковый номер постинга у этого челика
-//        posting.setTariffName(postingDto.getTariffName());
 
         User sender = userRepository.findByEmail(postingDto.getSenderEmail());
 
@@ -69,7 +69,17 @@ public class PostingServiceImpl implements PostingService {
             posting.setOfficeTo(officeTo);
         }
 
-//        posting.setStatus("Новый");
+        PostingStatus status = postingStatusRepository.findFirstByOrderByIdAsc();
+        if(status != null){
+            List <PostingEvent> postingEvents = new ArrayList<PostingEvent>();
+            PostingEvent postingEvent = new PostingEvent();
+            postingEvent.setPostingNumber(postingNumber);
+            postingEvent.setPostingStatus(status);
+            postingEvent.setPosting(posting);
+            posting.setPostingEvents(postingEvents);
+        }
+        posting.setAutoFillCreatedAt(true);
+        System.out.println("Сохраняю постинг");
         postingRepository.save(posting);
     }
 

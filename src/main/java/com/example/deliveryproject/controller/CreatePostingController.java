@@ -1,77 +1,98 @@
 package com.example.deliveryproject.controller;
 
 import com.example.deliveryproject.dto.PostingDto;
-//import com.example.deliveryproject.entity.Posting;
-import com.example.deliveryproject.repository.DeliveryTariffRepository;
-import com.example.deliveryproject.repository.OfficeRepository;
+import com.example.deliveryproject.dto.UserDto;
+import com.example.deliveryproject.entity.Posting;
+import com.example.deliveryproject.entity.PostingEvent;
+import com.example.deliveryproject.entity.User;
+import com.example.deliveryproject.repository.*;
 import com.example.deliveryproject.service.PostingService;
-//import com.example.deliveryproject.service.UserService;
-
-import jakarta.validation.Valid;
+import com.example.deliveryproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@Controller
+import static com.example.deliveryproject.controller.UserController.getValueFromJsonString;
+
+@RestController
 public class CreatePostingController {
-
+    private UserService userService;
     private PostingService postingService;
-
-    @Autowired
-    private OfficeRepository officeRepository;
-
     @Autowired
     private DeliveryTariffRepository deliveryTariffRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private OfficeRepository officeRepository;
+    @Autowired
+    private PostingEventRepository postingEventRepository;
 
-    public CreatePostingController(PostingService postingService) {
+    public CreatePostingController(UserService userService, PostingService postingService) {
+        this.userService = userService;
         this.postingService = postingService;
     }
 
-    @GetMapping("/create-posting")
-    public String showCreatingPostingForm(Model model){
-        PostingDto posting = new PostingDto();
-        List deliveryTariffs = deliveryTariffRepository.findAllTariffNames();
-        List regions = officeRepository.findAllRegions();
-        List offices = officeRepository.findAll();
-
-        model.addAttribute("deliveryTariffs", deliveryTariffs);
-        model.addAttribute("regions", regions);
-        model.addAttribute("offices", offices);
-        model.addAttribute("posting", posting);
-        return "create-posting";
+    @GetMapping("/getTariffList")
+    public List<String> getTariffList() {
+        List<String> deliveryTariffList = deliveryTariffRepository.findAllTariffNames();
+        System.out.println(deliveryTariffList);
+        return deliveryTariffList;
     }
 
-    @PostMapping("/create-posting/save")
-    public String registration(@Valid @ModelAttribute("posting") PostingDto posting,
-                               BindingResult result,
-                               Model model){
-        if (result.hasErrors()) {
-            System.out.println("ошибки" + result.getAllErrors());
-            model.addAttribute("posting", posting);
-            return "create-posting";
+    @RequestMapping("/create-posting")
+    public ModelAndView listRegisteredUsers(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("create-posting");
+        return modelAndView;
+    }
+    @RequestMapping("/offices")
+    public ModelAndView displayOfficesOnMap(){
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("offices");
+        return modelAndView;
+    }
+
+    @GetMapping("/users/checkUserExists/{email}")
+    public ResponseEntity<String> deletePosting2(@PathVariable String email){
+        System.out.println(email);
+        if (userRepository.findByEmail(email)==null){
+            System.out.println("404");
+            return new ResponseEntity<>("bad email", new HttpHeaders(), HttpStatus.NOT_FOUND);
         }
-        postingService.savePosting(posting);
-        return "redirect:/create-posting?success";
+        System.out.println("Такой пользователь существует");
+        return new ResponseEntity<>("success", new HttpHeaders(), HttpStatus.OK);
     }
 
+    @PostMapping("/create-posting")
+    public ResponseEntity<?> createPosting(@RequestBody String body) {
+        System.out.println(body);
+        String tariffName = getValueFromJsonString(body, "tariffName");
+        System.out.println(tariffName);
+        String senderEmail = getValueFromJsonString(body, "senderEmail");
+        System.out.println(senderEmail);
+        String receiverEmail = getValueFromJsonString(body, "receiverEmail");
+        System.out.println(receiverEmail);
+        String officeFrom = getValueFromJsonString(body, "officeFrom");
+        System.out.println(officeFrom);
+        String officeTo = getValueFromJsonString(body, "officeTo");
+        System.out.println(officeTo);
 
-    @GetMapping("/offices")
-    public String displayOfficesOnMap(){
-        return "offices";
+        PostingDto newPostingDto = new PostingDto();
+        newPostingDto.setTariffName(tariffName);
+        newPostingDto.setSenderEmail(senderEmail);
+        newPostingDto.setReceiverEmail(receiverEmail);
+        newPostingDto.setOfficeFromName(officeFrom);
+        newPostingDto.setOfficeToName(officeTo);
+
+        postingService.savePosting(newPostingDto);
+
+        return ResponseEntity.ok().build();
     }
-
-
-//    @GetMapping("/test")
-//    public String testLeaflet(Model model){
-////        List offices = officeRepository.findAll();
-////        model.addAttribute("offices", offices);
-//        return "test";
-//    }
 
 }

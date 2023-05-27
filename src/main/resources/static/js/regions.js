@@ -6,7 +6,13 @@ $.ajax({
         var regionRow;
         for (var i in regionList) {
             regionRow = `<option> ${regionList[i]} </option>`;
-            $('#region_filter').append(regionRow);
+            if (window.location.pathname.split('/')[1]==='offices') {
+                $('#region_filter').append(regionRow);
+            }
+            else{
+                $('#regionFrom').append(regionRow);
+                $('#regionTo').append(regionRow);
+            }
         }
     },
     error: function () {

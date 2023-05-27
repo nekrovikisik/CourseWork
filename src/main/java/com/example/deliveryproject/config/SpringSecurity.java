@@ -34,7 +34,10 @@ public class SpringSecurity {
                 "/js/regions.js",
                 "/js/fill_offices.js",
                 "/js/deleteEntity.js",
-                "/css/tracking.css"
+                "/js/fill_officeFromTo.js",
+                "/js/createPosting.js",
+                "/css/tracking.css",
+                "/js/checkUserExists.js"
         };
 
         http.csrf().disable()
@@ -62,6 +65,7 @@ public class SpringSecurity {
                                         .requestMatchers("/getPostingsByReceiverId/**").permitAll()
                                         .requestMatchers("/getOfficesByRegion/**").permitAll()
                                         .requestMatchers("/getRegionList").permitAll()
+                                        .requestMatchers("/getTariffList").permitAll()
 
 
                                         .requestMatchers(JS_WHITELIST).permitAll()

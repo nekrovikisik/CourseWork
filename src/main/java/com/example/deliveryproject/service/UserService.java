@@ -1,5 +1,6 @@
 package com.example.deliveryproject.service;
 
+import com.example.deliveryproject.dto.PostingDto;
 import com.example.deliveryproject.dto.UserDto;
 import com.example.deliveryproject.entity.User;
 

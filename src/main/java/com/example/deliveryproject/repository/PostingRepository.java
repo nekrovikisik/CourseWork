@@ -15,6 +15,8 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
 //    @Query(nativeQuery = true, value = "select * from postings where senderID = :senderID LIMIT 1")
     List<Posting> findAllBySender_Id(Long id);
     List<Posting> findAllByReceiver_Id(Long id);
+
+    @Query(nativeQuery = true, value = "select max(CAST(SUBSTRING_INDEX(posting_number, '-', -1) as UNSIGNED)) from postings where sender_id = :senderID LIMIT 1")
     int countPostingBySender_Id(Long senderID);
 
 }
