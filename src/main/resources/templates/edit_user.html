@@ -1,97 +1,137 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
->
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Delivery project</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-        crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Delivery project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous"
+    >
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
-
-  <div class="container-fluid">
-    <!--        <a class="navbar-brand" href="#">Delivery project</a>-->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <!--                <li class="nav-item">-->
-        <!--                    <a class="nav-link active" aria-current="page" th:href="@{/register}">Register</a>-->
-        <!--                </li>-->
-        <!--        <a class="navbar-brand" href="#">Delivery project</a>-->
-
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">CompanyName</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/create-posting">Create posting</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/users">Users</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/postings">Postings</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/offices">Our offices</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
-        </li>
-      </ul>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">CompanyName</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/create-posting">Create posting</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/users">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/postings">Postings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/offices">Our offices</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
+
 
 <br>
 <br>
 <div class="container">
-  <div class="row col-md-8 offset-md-2">
-    <div class="card">
-    </div>
-    <div class="card-header">
-      <h2 class="text-center">Обновить данные о пользователе</h2>
-    </div>
-    <div class="card-body">
+    <div class="row col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">Обновить данные о пользователе</h2>
+            </div>
+            <div class="card-body">
 
-      <form method="post" th:action="@{/users/{id} (id=${user.id})}" th:object = "${user}">
-        <div class ="form-group">
-          <label> Имя пользователя </label>
-          <input
-                  class = "form-control"
-                  name = "firstName"
-                  th:field = "*{name}"
-                  placeholder="Введите имя пользователя"
-                  type = "text"
-          />
-        </div>
+                <form method="post" action="/users/{id}" id="user-form">
+                    <div class="form-group">
+                        <label>Имя пользователя</label>
+                        <input class="form-control" name="firstName" placeholder="Введите имя пользователя" type="text">
+                    </div>
 
-        <div class ="form-group">
-          <label> user Email </label>
-          <input class="form-control"
-                 id="email"
-                 name="email"
-                 th:field = "*{email}"
-                 placeholder="Введите email пользователя"
-                 type="email"
-          />
-        </div>
+                    <div class="form-group">
+                        <label>Фамилия пользователя</label>
+                        <input class="form-control" name="lastName" placeholder="Введите фамилию пользователя"
+                               type="text">
+                    </div>
 
-        <div class = "box-footer">
-          <button type="submit" class = "btn btn-primary">
-            Submit
-          </button>
+                    <div class="form-group">
+                        <label>User Email</label>
+                        <input class="form-control" id="email" name="email" placeholder="Введите email пользователя"
+                               type="email">
+                    </div>
+
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+
+            </div>
         </div>
-      </form>
     </div>
-  </div>
 </div>
+
+<script>
+    document.getElementById('user-form').addEventListener('submit',
+        function (event) {
+            event.preventDefault();
+            var form = event.target;
+            var xhr = new XMLHttpRequest();
+            var userId = window.location.pathname.split('/')[3];
+            xhr.open(form.method, 'http://localhost:8080/users/' + userId);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    alert("Вы успешно обновили данные!");
+                } else {
+                    alert(`Что-то пошло не так, код ошибки: ${xhr.status}`);
+                }
+            };
+            xhr.send(JSON.stringify({
+                firstName: form.elements.firstName.value,
+                lastName: form.elements.lastName.value,
+                email: form.elements.email.value
+            }));
+        });
+</script>
+
+
+<script>
+    var userId = window.location.pathname.split('/')[3];
+    console.log('/getUserDto/' + userId);
+    $.ajax({
+        url: '/getUserDto/' + userId,
+        type: 'GET',
+        dataType: 'json',
+        success: function (userDto) {
+            console.log(document.getElementsByTagName("firstName"));
+            document.getElementsByName("firstName")[0].value = userDto.firstName;
+            document.getElementsByName("lastName")[0].value = userDto.lastName;
+            document.getElementsByName("email")[0].value = userDto.email;
+        },
+        error: function (xhr, status, errorThrown) {
+            console.log(xhr);
+            console.log(status);
+            console.log(errorThrown);
+        }
+
+    });
+</script>
 
 </body>
 </html>
